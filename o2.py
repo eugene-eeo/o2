@@ -12,7 +12,7 @@ def checksum(filename, blocksize=65536):
                 )
         for chunk in chunks:
             hasher.update(chunk)
-    return hasher.hexdigest()
+    return hasher.digest()
 
 
 class Index(object):
