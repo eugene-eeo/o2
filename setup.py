@@ -19,7 +19,6 @@ setup(
     name='o2',
     version='0.1.0',
     py_modules=['o2'],
-    scripts=['bin/o2-index'],
     install_requires=[
         'lsm-db==0.3.2',
     ],
