@@ -18,6 +18,9 @@ class PyTest(TestCommand):
 setup(
     name='o2',
     version='0.1.0',
+    url='https://github.com/eugene-eeo/o2',
+    author='Eeo Jun',
+    author_email='141bytes@gmail.com',
     py_modules=['o2'],
     install_requires=[
         'lsm-db==0.3.2',
