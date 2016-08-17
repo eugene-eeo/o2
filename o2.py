@@ -6,10 +6,7 @@ from lsm import LSM
 def checksum(filename, blocksize=65536):
     hasher = sha256()
     with open(filename, 'rb') as fp:
-        chunks = iter(
-                lambda: fp.read(blocksize),
-                bytes(),
-                )
+        chunks = iter(lambda: fp.read(blocksize), b'')
         for chunk in chunks:
             hasher.update(chunk)
     return hasher.digest()
@@ -22,15 +19,14 @@ class Index(object):
     def has_changed(self, path):
         return self.db[path] != checksum(path)
 
-    def index(self, files=()):
+    def update(self, files=()):
         with self.db.transaction() as txn:
-            for path in chain(self.files, files):
+            for path in files:
                 self.db[path] = checksum(path)
 
-    @property
-    def files(self):
-        return set(self.db.keys())
+    def __iter__(self):
+        return iter(self.db.keys())
 
     @property
     def changed(self):
-        return set(path for path in self.files if self.has_changed(path))
+        return [path for path in self if self.has_changed(path)]

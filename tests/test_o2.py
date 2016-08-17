@@ -8,7 +8,7 @@ def mock(tmpdir):
     return Index(str(p.join('test.db'))), p
 
 
-def test_index_files(mock):
+def test_index_iter(mock):
     index, tmpdir = mock
     f1 = tmpdir.join('f1.txt')
     f2 = tmpdir.join('f2.txt')
@@ -18,15 +18,15 @@ def test_index_files(mock):
 
     paths = [str(f1), str(f2)]
 
-    index.index(paths)
-    assert index.files == set(paths)
+    index.update(paths)
+    assert set(index) == set(paths)
 
 
 def test_index_has_changed(mock):
     index, tmpdir = mock
     f = tmpdir.join('file.txt')
     f.write('a')
-    index.index([str(f)])
+    index.update([str(f)])
 
     assert not index.has_changed(str(f))
 
@@ -43,10 +43,9 @@ def test_index_changed(mock):
     f1.write('a')
     f2.write('a')
 
-    index.index([str(f1), str(f2)])
-
-    assert index.changed == set()
+    index.update([str(f1), str(f2)])
+    assert index.changed == []
 
     f1.write('b')
     f2.write('b')
-    assert index.changed == {str(f1), str(f2)}
+    assert set(index.changed) == {str(f1), str(f2)}
