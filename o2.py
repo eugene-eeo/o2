@@ -6,8 +6,10 @@ from lsm import LSM
 def checksum(filename, blocksize=65536):
     hasher = sha256()
     with open(filename, 'rb') as fp:
-        chunks = iter(lambda: fp.read(blocksize), b'')
-        for chunk in chunks:
+        while True:
+            chunk = fp.read(blocksize)
+            if not chunk:
+                break
             hasher.update(chunk)
     return hasher.digest()
 
